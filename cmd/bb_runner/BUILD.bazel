@@ -36,6 +36,23 @@ container_layer(
     visibility = ["//visibility:public"],
 )
 
+# The runner with no OS base. intended for re-packaging onto a specific OS base.
+container_image(
+    name = "bb_runner_bare_container",
+    cmd = [
+        "-temp-directory=/run/lock",
+        "-temp-directory=/tmp",
+        "-temp-directory=/var/tmp",
+    ],
+    entrypoint = ["/bb_runner"],
+    layers = [
+        ":bb_runner_layer",
+        ":passwd_layer",
+    ],
+    user = "build",
+    visibility = ["//visibility:public"],
+)
+
 container_image(
     name = "bb_runner_debian8_container",
     base = "@rbe_debian8_base//image",
