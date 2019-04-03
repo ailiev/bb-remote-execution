@@ -21,6 +21,7 @@ func main() {
 	var (
 		jobsPendingMax   = flag.Uint("jobs-pending-max", 100, "Maximum number of build actions to be enqueued")
 		webListenAddress = flag.String("web.listen-address", ":80", "Port on which to expose metrics")
+		execDigestFuncname = flag.String("execution-digest-function", "sha256", "Digest function reported by the server in its execution capabilities.")
 	)
 	flag.Parse()
 
@@ -30,7 +31,19 @@ func main() {
 		log.Fatal(http.ListenAndServe(*webListenAddress, nil))
 	}()
 
-	executionServer, schedulerServer := builder.NewWorkerBuildQueue(util.DigestKeyWithInstance, *jobsPendingMax)
+	var execDigestFunc remoteexecution.DigestFunction
+	switch *execDigestFuncname {
+	case "sha256":
+		execDigestFunc = remoteexecution.DigestFunction_SHA256
+	case "sha1":
+		execDigestFunc = remoteexecution.DigestFunction_SHA1
+	case "md5":
+		execDigestFunc = remoteexecution.DigestFunction_MD5
+	default:
+		log.Fatalf("Unknown digest function '%s' [from cmd line arg execution-digest-function]", execDigestFuncname)
+	}
+
+	executionServer, schedulerServer := builder.NewWorkerBuildQueue(util.DigestKeyWithInstance, execDigestFunc, *jobsPendingMax)
 
 	// RPC server.
 	s := grpc.NewServer(
