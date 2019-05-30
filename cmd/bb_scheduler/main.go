@@ -25,6 +25,11 @@ func main() {
 	)
 	flag.Parse()
 
+	err := util.UseBinaryLogTempFileSink()
+	if err != nil {
+		log.Fatalf("Failed to UseBinaryLogTempFileSink: %v", err)
+	}
+
 	// Web server for metrics and profiling.
 	http.Handle("/metrics", promhttp.Handler())
 	go func() {

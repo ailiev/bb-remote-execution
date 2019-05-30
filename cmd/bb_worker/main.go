@@ -42,6 +42,11 @@ func main() {
 	)
 	flag.Parse()
 
+	err := util.UseBinaryLogTempFileSink()
+	if err != nil {
+		log.Fatalf("Failed to UseBinaryLogTempFileSink: %v", err)
+	}
+
 	// To ease privilege separation, clear the umask. This process
 	// either writes files into directories that can easily be
 	// closed off, or creates files with the appropriate mode to be
