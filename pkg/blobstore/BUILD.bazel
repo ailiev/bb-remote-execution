@@ -1,5 +1,9 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
+package(
+    default_visibility = ["//:__pkg__"],  # for the :gopath target
+)
+
 go_library(
     name = "go_default_library",
     srcs = [

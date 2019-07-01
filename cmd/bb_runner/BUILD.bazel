@@ -6,7 +6,7 @@ go_library(
     name = "go_default_library",
     srcs = ["main.go"],
     importpath = "github.com/buildbarn/bb-remote-execution/cmd/bb_runner",
-    visibility = ["//visibility:private"],
+    visibility = ["//:__pkg__"],  # for the :gopath target
     deps = [
         "//pkg/configuration/bb_runner:go_default_library",
         "//pkg/environment:go_default_library",

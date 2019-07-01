@@ -6,7 +6,7 @@ go_library(
     name = "go_default_library",
     srcs = ["main.go"],
     importpath = "github.com/buildbarn/bb-remote-execution/cmd/bb_scheduler",
-    visibility = ["//visibility:private"],
+    visibility = ["//:__pkg__"],  # for the :gopath target
     deps = [
         "//pkg/builder:go_default_library",
         "//pkg/configuration/bb_scheduler:go_default_library",
